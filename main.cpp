@@ -8,11 +8,11 @@ int main()
     shape.setFillColor(sf::Color::Green);
 
     // Load a sprite to display
-    const sf::Texture texture("cute_image.jpg");
+    const sf::Texture texture("Assets/cute_image.jpg");
     sf::Sprite sprite(texture);
 
     // Create a graphical text to display
-    const sf::Font font("ARIAL.TTF");
+    const sf::Font font("Assets/ARIAL.TTF");
     sf::Text text(font, "Hello SFML", 50);
     text.setFillColor(sf::Color::Black);
     // Start the game loop
