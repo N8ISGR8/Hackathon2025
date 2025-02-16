@@ -12,6 +12,11 @@ void MongoDB::SendImage(std::string name, int64_t parent, std::vector<std::strin
     Instance()->_SendImage(name, parent, tags, data);
 }
 
+std::string MongoDB::ReadImageFromName(std::string name)
+{
+    return Instance()->_ReadImageFromName(name);
+}
+
 std::string MongoDB::ReadImageFromId(int64_t id)
 {
     return Instance()->_ReadImageFromId(id);
@@ -44,6 +49,10 @@ void MongoDB::_SendImage(std::string name, int64_t parent, std::vector<std::stri
 std::string MongoDB::_ReadImageFromId(int64_t id)
 {
     bsoncxx::stdx::optional<bsoncxx::document::value> o = collection.find_one(bsoncxx::builder::basic::make_document(kvp("id", id)));
+    /*
+    mongocxx::cursor cur = collection.find(bsoncxx::builder::basic::make_document(kvp("id", id)));
+    for(auto a : cur)
+    */
     if (o.has_value())
     {
         bsoncxx::document::view::const_iterator viewIt = o.value().view().find("data");
@@ -54,6 +63,12 @@ std::string MongoDB::_ReadImageFromId(int64_t id)
         }
     }
     return "";
+}
+
+std::string MongoDB::_ReadImageFromName(std::string name)
+{
+    
+    return std::string();
 }
 
 MongoDB::MongoDB()
