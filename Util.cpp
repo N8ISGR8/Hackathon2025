@@ -32,6 +32,11 @@ void Browse()
 	{
 		std::cout << (i+1) << ") " << MongoDB::GetNameFromID(ids[i]) << std::endl;
 	}
+	int count = 5;
+	if (ids.size() < 5)
+	{
+		count = ids.size();
+	}
 
 	std::string userin;
 	int userinint;
@@ -40,7 +45,7 @@ void Browse()
 	{
 		try {
 			userinint = stoi(userin);
-			if (userinint > 5 || userinint < 0)
+			if (userinint > count || userinint < 0)
 			{
 				throw std::runtime_error("nuh uh");
 			}
@@ -211,6 +216,52 @@ void ForkImage()
 	std::cout << "End fork upload\n";
 }
 
+void GetContributions()
+{
+	int64_t user;
+	if (std::filesystem::exists("userid.txt"))
+	{
+		std::ifstream ifs = std::ifstream("userid.txt");
+		ifs >> user;
+		ifs.close();
+		std::vector<int64_t> ids = MongoDB::Contributions(user);
+		if (ids.size() == 0)
+		{
+			std::cout << "Could not find your work in database, try contributing something!\n";
+			return;
+		}
+
+		std::cout << "0 to exit or\nPick a result (1-" << ids.size() << "): \n";
+		for (int i = 0; i < ids.size(); ++i)
+		{
+			std::cout << (i + 1) << ") " << MongoDB::GetNameFromID(ids[i]) << std::endl;
+		}
+		std::string userin;
+		int userinint;
+		while (true)
+		{
+			try {
+				userinint = stoi(userin);
+				if (userinint > ids.size() || userinint < 0)
+				{
+					throw std::runtime_error("nuh uh");
+				}
+				break;
+			}
+			catch (const std::exception& e) {
+				std::cout << "Nuh uh buddy - you need a number in the valid range!\n";
+				std::cin >> userin;
+			}
+		}
+		selectedImage = ids[userinint - 1];
+		OpenImage();
+	}
+	else
+	{
+		std::cout << "Could not find your userid in database, try contributing something!\n";
+	}
+}
+
 void menu() 
 {
 	while(true) 
@@ -220,7 +271,8 @@ void menu()
 		std::cout << "Welcome to NullPtr's Art-Forker! Press the corresponding number to choose the option:\n\n";
 		std::cout << "1 for uploading an original image in the program's files (inserting manually)\n";
 		std::cout << "2 for browsing the database of images uploaded,\n";
-		std::cout << "or 3 for searching for art by name\n(0 to exit)\n";
+		std::cout << "3 for searching for art by name,\n";
+		std::cout << "or 4 finding your contributions\n(0 to exit)\n";
 		std::cout << "What'll it be, fellas?\n";
 		std::cin >> userin;
 
@@ -228,7 +280,7 @@ void menu()
 		{
 			try {
 				userinint = stoi(userin);
-				if(userinint > 3 || userinint < 0) 
+				if(userinint > 4 || userinint < 0) 
 				{
 					throw std::runtime_error("nuh uh");
 				}
@@ -252,6 +304,9 @@ void menu()
 			break;
 		case 3:
 			ImageFromName();
+			break;
+		case 4:
+			GetContributions();
 			break;
 		}
 		std::cout << "\n\n";
