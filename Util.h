@@ -5,6 +5,9 @@
 #include <fstream>
 #include "DBHandler.h"
 #include <cmath>
+#include <sstream>
+#include <thread>
+#include "Window.h"
 
 //what do you want
 void menu();
@@ -14,11 +17,9 @@ void UploadImage(int64_t parent = 0);
 
 void Browse();
 
-std::vector<int64_t> GetRandomIDs();
-
-std::string GetNameFromID(int64_t id);
+void OpenImage();
 
 // currently open art window
-void DownloadImage();
+void ImageFromName();
 
 void ForkImage();
