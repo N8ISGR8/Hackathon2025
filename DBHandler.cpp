@@ -12,6 +12,11 @@ void MongoDB::SendImage(std::string name, int64_t parent, std::vector<std::strin
     Instance()->_SendImage(name, parent, tags, data);
 }
 
+std::string MongoDB::ReadImageFromId(int64_t id)
+{
+    return Instance()->_ReadImageFromId(id);
+}
+
 void MongoDB::_SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const char* data)
 {
     document doc = document{};
@@ -33,7 +38,22 @@ void MongoDB::_SendImage(std::string name, int64_t parent, std::vector<std::stri
     } while (collection.find_one(bsoncxx::builder::basic::make_document(kvp("id", id))).has_value());
     doc.append(kvp("id", bsoncxx::types::b_int64(id)));
 
-    instance->collection.insert_one(doc.view());
+    collection.insert_one(doc.view());
+}
+
+std::string MongoDB::_ReadImageFromId(int64_t id)
+{
+    bsoncxx::stdx::optional<bsoncxx::document::value> o = collection.find_one(bsoncxx::builder::basic::make_document(kvp("id", id)));
+    if (o.has_value())
+    {
+        bsoncxx::document::view::const_iterator viewIt = o.value().view().find("data");
+        if (*viewIt)
+        {
+            bsoncxx::stdx::string_view sv = (*viewIt).get_string().value;
+            return std::string (sv.begin(), sv.end());
+        }
+    }
+    return "";
 }
 
 MongoDB::MongoDB()
