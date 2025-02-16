@@ -8,9 +8,18 @@
 #include <istream>
 #include <thread>
 #include "Window.h"
+#include "Util.h"
 
 int main()
 {
+    menu();
+    //main menu: upload, browse, menu, fork, display
+    //upload: enter file name
+    //browse: get random IDs and names of those IDs, you can pick from a name
+    //menu for when image is open, when window is open
+    //fork: asks you for a name, list a number of tags (any amount!) and have you upload an image
+    //display: given a name, displays all children of the image
+
     std::string fileName = "Untitled.png";
 //    std::cin >> fileName; 
     std::ifstream file(fileName,std::ios::binary);
