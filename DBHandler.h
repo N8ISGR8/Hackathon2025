@@ -15,10 +15,18 @@ public:
 	static void SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const std::string data);
 	static std::string ReadImageFromName(std::string name);
 	static std::string ReadImageFromId(int64_t id);
+	static std::vector<int64_t> GetNRandomIDs(int n);
+	static std::string GetNameFromID(int64_t id);
+	static int64_t GetParent(int64_t id);
+	static std::vector<int64_t> GetChildren(int64_t id);
 private:
 	void _SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const std::string data);
 	std::string _ReadImageFromId(int64_t id);
 	std::string _ReadImageFromName(std::string name);
+	std::vector<int64_t> _GetNRandomIDs(int n);
+	std::string _GetNameFromID(int64_t id);
+	int64_t _GetParent(int64_t id);
+	std::vector<int64_t> _GetChildren(int64_t id);
 	static MongoDB* Instance() {
 		if (instance == nullptr) {
 			instance = new MongoDB();
