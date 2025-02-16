@@ -8,6 +8,7 @@
 #include <sstream>
 #include <thread>
 #include "Window.h"
+#include <filesystem>
 
 //what do you want
 void menu();
@@ -23,3 +24,5 @@ void OpenImage();
 void ImageFromName();
 
 void ForkImage();
+
+void GetContributions();

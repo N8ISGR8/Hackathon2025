@@ -20,6 +20,7 @@ public:
 	static int64_t GetParent(int64_t id);
 	static std::vector<int64_t> GetChildren(int64_t id);
 	static std::vector<std::string> GetTags(int64_t id);
+	static std::vector<int64_t> Contributions(int64_t user);
 private:
 	void _SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const std::string data);
 	std::string _ReadImageFromId(int64_t id);
@@ -29,6 +30,7 @@ private:
 	int64_t _GetParent(int64_t id);
 	std::vector<int64_t> _GetChildren(int64_t id);
 	std::vector<std::string> _GetTags(int64_t id);
+	std::vector<int64_t> _Contributions(int64_t user);
 	static MongoDB* Instance() {
 		if (instance == nullptr) {
 			instance = new MongoDB();
@@ -39,8 +41,10 @@ private:
 	mongocxx::instance mongoInstance;
 	mongocxx::client client;
 	mongocxx::v_noabi::collection collection;
+	mongocxx::v_noabi::collection users;
 	mongocxx::v_noabi::database db;
 	std::mt19937 generator;
 	MongoDB();
 	std::string uriString = "mongodb+srv://app_user:ex17OefiFYvMfKM3@cluster0.sz37p.mongodb.net/?retryWrites=true&w=majority";
+	int64_t user;
 };

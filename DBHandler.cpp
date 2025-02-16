@@ -1,5 +1,7 @@
 #include "DBHandler.h"
 #include <bsoncxx/types.hpp>
+#include <filesystem>
+#include <fstream>
 
 using bsoncxx::builder::basic::kvp;
 using bsoncxx::builder::basic::document;
@@ -48,6 +50,11 @@ std::vector<std::string> MongoDB::GetTags(int64_t id)
     return Instance()->_GetTags(id);
 }
 
+std::vector<int64_t> MongoDB::Contributions(int64_t user)
+{
+    return Instance()->_Contributions(user);
+}
+
 void MongoDB::_SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const std::string data)
 {
     document doc = document{};
@@ -69,6 +76,7 @@ void MongoDB::_SendImage(std::string name, int64_t parent, std::vector<std::stri
         id.value = distribution(generator);
     } while (collection.find_one(make_document(kvp("id", id))).has_value());
     doc.append(kvp("id", bsoncxx::types::b_int64(id)));
+    doc.append(kvp("contributor", user));
 
     collection.insert_one(doc.view());
 
@@ -189,12 +197,54 @@ std::vector<std::string> MongoDB::_GetTags(int64_t id)
     return tags;
 }
 
+std::vector<int64_t> MongoDB::_Contributions(int64_t user)
+{
+    std::vector<int64_t> imgs;
+    mongocxx::cursor cursor = collection.find(bsoncxx::builder::basic::make_document(kvp("contributor", user)));
+    for (const bsoncxx::document::view& a : cursor)
+    {
+        imgs.push_back((*a.find("id")).get_int64());
+    }
+    return imgs;
+}
+
 MongoDB::MongoDB()
 {
     generator = std::mt19937(std::random_device{}());
     mongocxx::uri uri = mongocxx::uri(uriString);
 	client = mongocxx::client(uri);
 	db = client["ArtDB"];
-	collection = db["Art"];
+    collection = db["Art"];
+    users = db["Contributors"];
+    if (std::filesystem::exists("userid.txt"))
+    {
+        std::ifstream ifs = std::ifstream("userid.txt");
+        ifs >> user;
+        ifs.close();
+        if (!users.find_one(make_document(kvp("contributor", user))).has_value())
+        {
+            document doc = document{};
+            doc.append(kvp("contributor", user));
+            users.insert_one(doc.view());
+        }
+    }
+    else
+    {
+        std::uniform_int_distribution<int64_t> distribution(0, 999999);
+        do
+        {
+            user = distribution(generator);
+        } while (users.find_one(make_document(kvp("contributor", user))).has_value());
+        std::ofstream ofs = std::ofstream("userid.txt");
+        ofs << user;
+        ofs.close();
+
+
+
+        document doc = document{};
+        doc.append(kvp("contributor", user));
+        users.insert_one(doc.view());
+
+    }
 }
 
