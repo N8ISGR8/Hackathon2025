@@ -141,7 +141,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="byteInStream.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="byteInStream.hpp" />
+    <ClInclude Include="header.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgBytes.csv" />
+    <None Include="savedImgBytes.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
