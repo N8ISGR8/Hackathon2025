@@ -7,7 +7,7 @@ using bsoncxx::builder::basic::array;
 
 MongoDB* MongoDB::instance = nullptr;
 
-void MongoDB::SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const char* data)
+void MongoDB::SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const std::string data)
 {
     Instance()->_SendImage(name, parent, tags, data);
 }
@@ -17,7 +17,7 @@ std::string MongoDB::ReadImageFromId(int64_t id)
     return Instance()->_ReadImageFromId(id);
 }
 
-void MongoDB::_SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const char* data)
+void MongoDB::_SendImage(std::string name, int64_t parent, std::vector<std::string> tags, const std::string data)
 {
     document doc = document{};
     array arrTags = array{};
