@@ -34,7 +34,7 @@ int main()
     doc.append(kvp("tags", arrTags));
     doc.append(kvp("children", arrChildren));
     doc.append(kvp("data", "balls"));
-    
+
     collection.insert_one(doc.view());
     return 0;
 }
