@@ -1,42 +1,38 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+#include <cstdint>
+#include <iostream>
+#include <vector>
+#include "DBHandler.h"
+#include <Windows.h>
+#include <sstream>
+#include <fstream>
+#include <istream>
+#include <thread>
+#include "Window.h"
+#include "Util.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({ 1200,900 }), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    menu();
+    //main menu: upload, browse, menu, fork, display
+    //upload: enter file name
+    //browse: get random IDs and names of those IDs, you can pick from a name
+    //menu for when image is open, when window is open
+    //fork: asks you for a name, list a number of tags (any amount!) and have you upload an image
+    //display: given a name, displays all children of the image
 
-    // Load a sprite to display
-    const sf::Texture texture("Assets/cute_image.jpg");
-    sf::Sprite sprite(texture);
-
-    // Create a graphical text to display
-    const sf::Font font("Assets/ARIAL.TTF");
-    sf::Text text(font, "Hello SFML", 50);
-    text.setFillColor(sf::Color::Black);
-    // Start the game loop
-    while (window.isOpen())
-    {
-        // Process events
-        while (const std::optional event = window.pollEvent())
-        {
-            // Close window: exit
-            if (event->is<sf::Event::Closed>())
-                window.close();
-        }
-
-        // Clear screen
-        window.clear();
-
-        // Draw the sprite
-        window.draw(sprite);
-
-        // Draw the string
-        window.draw(text);
-
-        // Update the window
-        window.display();
-    }
+    //std::string fileName = "Untitled.png";
+    ////std::cin >> fileName; 
+    //std::ifstream file(fileName,std::ios::binary);
+    //std::string sendImg((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    //file.close();
+    //
+    ////MongoDB::SendImage("testname", 0, { "tag1", "tag2" }, sendImg);
+    //Sleep(1000);
+    //std::string img = MongoDB::ReadImageFromId(886385);
+    //bool kill = false;
+    //std::thread t = std::thread(WindowRun, sendImg, std::ref(kill));
+    //Sleep(10000);
+    //kill = true;
+    //while (1);
     return 0;
 }
